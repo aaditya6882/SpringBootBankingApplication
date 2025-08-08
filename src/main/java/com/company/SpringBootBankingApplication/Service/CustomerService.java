@@ -1,6 +1,8 @@
 package com.company.SpringBootBankingApplication.Service;
 import com.company.SpringBootBankingApplication.model.Customer;
 import com.company.SpringBootBankingApplication.repository.CustomerRepository;
+import com.company.SpringBootBankingApplication.security.SecurityConfig;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,14 +12,18 @@ import java.util.Optional;
 public class CustomerService {
 @Autowired
  private CustomerRepository repo;
-public Customer createAccount(Customer c){
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public Customer createAccount(Customer c){
         if (repo.existsByUserName(c.getUsername())) {
             throw new IllegalArgumentException("Username already exists");
         }
         if (repo.existsById(c.getAccountNumber())) {
             throw new IllegalArgumentException("Account number already exists");
         }
-        c.setIsActive(true);
+        c.setPassword(passwordEncoder.encode(c.getPassword()));
+        c.setActive(true);
     return repo.save(c);
     }
     public Optional<Customer> findByAccountNumber(String accountNumber) {
@@ -43,13 +49,13 @@ public Customer createAccount(Customer c){
 
     public void disableAccount(String accountNumber) {
         Customer existing = repo.findById(accountNumber).orElseThrow(() -> new RuntimeException("Account not found"));
-        existing.setIsActive(false);
+        existing.setActive(false);
         repo.save(existing);
     }
 
     public void enableAccount(String accountNumber) {
         Customer existing = repo.findById(accountNumber).orElseThrow(() -> new RuntimeException("Account not found"));
-        existing.setIsActive(true);
+        existing.setActive(true);
         repo.save(existing);
     }
 }

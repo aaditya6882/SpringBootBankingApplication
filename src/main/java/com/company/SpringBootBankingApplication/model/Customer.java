@@ -60,5 +60,5 @@ public class Customer {
     public void setBalance(double balance) { this.balance = balance; }
 
     public boolean isActive() { return isActive; }
-    public void setIsActive(boolean active) { isActive = active; }
+    public void setActive(boolean active) { isActive = active; }
 }
