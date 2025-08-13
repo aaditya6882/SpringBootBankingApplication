@@ -19,7 +19,7 @@ public class Customer {
     @Column(name="username" ,nullable = false, unique = true)
     private String userName;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String password; // NOTE: store hashed in production!
 
     @Column(nullable = false)
@@ -28,9 +28,11 @@ public class Customer {
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
+    @Column(nullable = false)
+    private String role;
     public Customer() {}
 
-    public Customer(String accountNumber, String firstName, String lastName, String username, String password, double balance) {
+    public Customer(String accountNumber, String firstName, String lastName, String username, String password, double balance, String role) {
         this.accountNumber = accountNumber;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -38,6 +40,7 @@ public class Customer {
         this.password = password;
         this.balance = balance;
         this.isActive = true;
+        this.role = role;
     }
 
     // Getters and setters (generated)
@@ -61,4 +64,7 @@ public class Customer {
 
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }

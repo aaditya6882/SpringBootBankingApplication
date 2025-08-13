@@ -20,7 +20,7 @@ public class CustomerUserDetailsService implements UserDetailsService {
         if ("admin".equals(username)) {
             return new User(
                     "admin",
-                    passwordEncoder().encode("admin123"), // hardcoded password, hashed
+                    passwordEncoder().encode("admin123"),
                     List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
             );
         }
