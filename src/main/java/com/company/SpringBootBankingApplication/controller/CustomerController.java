@@ -3,13 +3,16 @@ package com.company.SpringBootBankingApplication.controller;
 
 import com.company.SpringBootBankingApplication.Service.CustomerService;
 import com.company.SpringBootBankingApplication.model.Customer;
+import com.company.SpringBootBankingApplication.model.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.swing.text.html.Option;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -17,11 +20,15 @@ import java.util.Optional;
 public class CustomerController {
     @Autowired
     CustomerService customerService;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @PostMapping("/createAccount")
     public ResponseEntity createAccount(@RequestBody Customer c){
-        customerService.createAccount(c);
-        return ResponseEntity.ok("Account Created");
+        Customer account = customerService.createAccount(c);
+        if(account != null){
+            return ResponseEntity.ok("Account Created");
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/{accNum}")
@@ -49,9 +56,38 @@ public class CustomerController {
 
     }
 
-    @GetMapping("/{userName}/search")
-        public ResponseEntity<Optional<Customer>> search(@PathVariable String userName){
-            Optional<Customer> l=customerService.findByUsername(userName);
+    @GetMapping("/{accountNumber}/search")
+        public ResponseEntity<Optional<Customer>> search(@PathVariable String accountNumber){
+            Optional<Customer> l=customerService.findByAccountNumber(accountNumber);
             return ResponseEntity.ok(l);
         }
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        // Hardcoded admin
+        if ("admin".equals(request.getUsername()) && "admin123".equals(request.getPassword())) {
+            Map<String, Object> res = new HashMap<>();
+            res.put("username", "admin");
+            res.put("role", "ADMIN");
+            res.put("accountNumber", "0000");
+            return ResponseEntity.ok(res);
+        }
+
+        // Check customer in DB
+        Optional<Customer> customerOpt = customerService.findByUsername(request.getUsername());
+        if (customerOpt.isPresent()) {
+            Customer customer = customerOpt.get();
+            if (passwordEncoder.matches(request.getPassword(), customer.getPassword())) {
+                Map<String, Object> res = new HashMap<>();
+                res.put("username", customer.getUsername());
+                res.put("role", customer.getRole());
+                res.put("accountNumber", customer.getAccountNumber());
+                return ResponseEntity.ok(res);
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Invalid username or password");
+    }
+
+
 }

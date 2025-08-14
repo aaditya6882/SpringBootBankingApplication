@@ -1,5 +1,6 @@
 package com.company.SpringBootBankingApplication.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +18,7 @@ public class Customer {
     private String lastName;
 
     @Column(name="username" ,nullable = false, unique = true)
+    @JsonProperty("username")
     private String userName;
 
     @Column(nullable = true)

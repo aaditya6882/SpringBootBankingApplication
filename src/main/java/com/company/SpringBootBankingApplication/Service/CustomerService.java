@@ -2,6 +2,7 @@ package com.company.SpringBootBankingApplication.Service;
 import com.company.SpringBootBankingApplication.model.Customer;
 import com.company.SpringBootBankingApplication.repository.CustomerRepository;
 import com.company.SpringBootBankingApplication.security.SecurityConfig;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class CustomerService {
  private CustomerRepository repo;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @Transactional
     public Customer createAccount(Customer c){
         if (repo.existsByUserName(c.getUsername())) {
             throw new IllegalArgumentException("Username already exists");
@@ -32,6 +33,9 @@ public class CustomerService {
     public Optional<Customer> findByUsername(String username) {
         return repo.findByUserName(username);
     }
+    public boolean verifyPassword(Customer user, String rawPassword) {
+        return passwordEncoder.matches(rawPassword, user.getPassword());
+    }
     public double getBalance(String username) {
         Optional<Customer> c = repo.findByUserName(username);
         return c.map(Customer::getBalance).orElse(0.0);
@@ -43,7 +47,7 @@ public class CustomerService {
         existing.setFirstName(updated.getFirstName());
         existing.setLastName(updated.getLastName());
         existing.setUsername(updated.getUsername());
-        existing.setPassword(updated.getPassword());
+        existing.setPassword(passwordEncoder.encode(updated.getPassword()));
         repo.save(existing);
     }
 

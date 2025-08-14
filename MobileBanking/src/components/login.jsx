@@ -1,60 +1,31 @@
-// import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-
-// export default function Login() {
-//     const [username, setUsername] = useState('');
-//     const [password, setPassword] = useState('');
-//     const navigate = useNavigate();
-//
-//     const handleLogin = () => {
-//         if (username === 'admin' && password === 'admin123') {
-//             navigate('/admin');
-//         } else {
-//             navigate('/user');
-//         }
-//     };
-//
-//     return (
-//         <div style={{ padding: '50px' }}>
-//             <h2>Login</h2>
-//             <input
-//                 placeholder="Username"
-//                 value={username}
-//                 onChange={e => setUsername(e.target.value)}
-//             /><br/>
-//             <input
-//                 placeholder="Password"
-//                 type="password"
-//                 value={password}
-//                 onChange={e => setPassword(e.target.value)}
-//             /><br/>
-//             <button onClick={handleLogin}>Login</button>
-//         </div>
-//     );
-// }
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
+import { GoogleLogin } from "@react-oauth/google";
 
-export default function login() {
-
+export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    const handleLogin = () => {
-        // For now, simple mock logic
-        if (username === "admin" && password === "admin123") {
-            navigate("/admin");
-        } else {
-            navigate("/user");
+    const handleLogin = async () => {
+        try {
+            const res = await axios.post("http://localhost:8080/api/customers/login", {
+                username,
+                password
+            });
+            localStorage.setItem("user", JSON.stringify(res.data));
+            if (res.data.role === "ADMIN") navigate("/admin");
+            else navigate("/user");
+        } catch (err) {
+            alert(err.response?.data || "Login failed");
         }
     };
 
-    const handleGoogleLogin = (credentialResponse) => {
-        // Mock login: navigate to user dashboard after Google login
-        navigate("/user");
-    };
+    // const handleGoogleLogin = (credentialResponse) => {
+    //     // Mock: After Google login, navigate to user page
+    //     navigate("/user");
+    // };
 
     return (
         <div style={{ padding: "50px" }}>
@@ -71,7 +42,7 @@ export default function login() {
                 onChange={e => setPassword(e.target.value)}
             /><br/>
             <button onClick={handleLogin}>Login</button>
-            <hr />
+            <hr/>
             {/*<GoogleLogin*/}
             {/*    onSuccess={handleGoogleLogin}*/}
             {/*    onError={() => alert("Google login failed")}*/}
