@@ -27,16 +27,19 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        // Allow POST to create account without auth
-                        .requestMatchers(HttpMethod.POST, "/api/customers/createAccount").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/customers/createAccount").hasRole("ADMIN")
                         .requestMatchers("/api/customers/login").permitAll()
-                        .requestMatchers("/api/transactions/*").permitAll()
-                        .requestMatchers("/api/customers/*").permitAll()
                         .requestMatchers("/api/customers/*/balance", "/api/transactions/history")
                         .hasRole("CUSTOMER")
                         .requestMatchers("/api/customers/**", "/api/transactions/**")
                         .hasRole("ADMIN")
                         .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
+                        .defaultSuccessUrl("/api/customers/oauth2/success", true) // redirect after login
                 )
                 .httpBasic(Customizer.withDefaults());
 

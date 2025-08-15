@@ -19,7 +19,10 @@ export default function CreateAccount() {
                 password,
                 balance: 0,
                 role,
-            });
+            },
+                {
+                    auth: { username: admin.username, password: admin.password } 
+                });
             alert("Account created successfully!");
 
         } catch (err) {

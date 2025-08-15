@@ -5,10 +5,14 @@ export function DepositWithDraw() {
     const [username, setUsername] = useState("");
     const [accountNumber, setAccountNumber] = useState("");
     const [amount, setAmount] = useState(0);
+    const admin = JSON.parse(localStorage.getItem("user"));
+    const adminUsername = admin?.username;
+    const adminPassword = admin?.password;
 
     const deposit = async () => {
         try {
             await axios.post(`http://localhost:8080/api/transactions/deposit`, null, {
+                auth: { username: adminUsername, password: adminPassword },
                 params: { userName: username, accNum: accountNumber, amount }
 
             });
@@ -21,6 +25,7 @@ export function DepositWithDraw() {
     const withdraw = async () => {
         try {
             await axios.post(`http://localhost:8080/api/transactions/withdraw`, null, {
+                auth: { username: adminUsername, password: adminPassword },
                 params: { userName: username, accNum: accountNumber, amount }
 
             });
@@ -31,8 +36,8 @@ export function DepositWithDraw() {
     };
 
     return (
-        <>
-            <h3>Admin Deposit / Withdraw</h3>
+        <div style={{ padding: "50px" }}>
+            <h2>Admin Deposit / Withdraw</h2>
             <input
                 type="text"
                 value={username}
@@ -53,6 +58,6 @@ export function DepositWithDraw() {
             /><br />
             <button onClick={deposit}>Deposit</button>
             <button onClick={withdraw}>Withdraw</button>
-        </>
+        </div>
     );
 }

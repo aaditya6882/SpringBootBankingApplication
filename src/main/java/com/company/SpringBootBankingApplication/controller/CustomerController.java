@@ -4,10 +4,13 @@ package com.company.SpringBootBankingApplication.controller;
 import com.company.SpringBootBankingApplication.Service.CustomerService;
 import com.company.SpringBootBankingApplication.model.Customer;
 import com.company.SpringBootBankingApplication.model.LoginRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +26,7 @@ public class CustomerController {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @PostMapping("/createAccount")
-    public ResponseEntity createAccount(@RequestBody Customer c){
+    public ResponseEntity createAccount(@RequestBody @Valid Customer c){
         Customer account = customerService.createAccount(c);
         if(account != null){
             return ResponseEntity.ok("Account Created");
@@ -87,6 +90,28 @@ public class CustomerController {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body("Invalid username or password");
+    }
+    @GetMapping("/oauth2/success")
+    public ResponseEntity<?> oauth2Success(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        if (oAuth2User == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OAuth2User is null");
+
+        String email = oAuth2User.getAttribute("email");
+        System.out.println("OAuth2 Email: " + email);
+
+        Optional<Customer> customerOpt = customerService.findByUsername(email);
+        System.out.println("Customer found: " + customerOpt.isPresent());
+
+        if (customerOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not registered");
+        }
+
+        Customer customer = customerOpt.get();
+        Map<String, Object> res = new HashMap<>();
+        res.put("username", customer.getUsername());
+        res.put("role", customer.getRole());
+        res.put("accountNumber", customer.getAccountNumber());
+
+        return ResponseEntity.ok(res);
     }
 
 

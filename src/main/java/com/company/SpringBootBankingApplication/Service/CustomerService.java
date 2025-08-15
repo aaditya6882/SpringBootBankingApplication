@@ -47,7 +47,10 @@ public class CustomerService {
         existing.setFirstName(updated.getFirstName());
         existing.setLastName(updated.getLastName());
         existing.setUsername(updated.getUsername());
-        existing.setPassword(passwordEncoder.encode(updated.getPassword()));
+        if (updated.getPassword() != null && !updated.getPassword().isEmpty()) {
+            existing.setPassword(passwordEncoder.encode(updated.getPassword()));
+        }
+
         repo.save(existing);
     }
 

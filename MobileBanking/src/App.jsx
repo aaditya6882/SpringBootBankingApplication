@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './App.css'
 import Login from "./components/login.jsx";
 import UserDashboard from "./components/UserDashboard.jsx";
 import AdminDashboard from "./components/AdminDashboard.jsx";

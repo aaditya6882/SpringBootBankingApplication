@@ -4,10 +4,14 @@ import axios from "axios";
 export default function SearchUser() {
     const [accountNumber, setaccountNumber] = useState("");
     const [userData, setUserData] = useState(null);
+    const admin = JSON.parse(localStorage.getItem("user"));
+    const adminUsername = admin?.username;
+    const adminPassword = admin?.password;
 
     const handleSearch = async () => {
         try {
             const res = await axios.get(`http://localhost:8080/api/customers/${accountNumber}/search`, {
+                auth: { username: adminUsername, password: adminPassword },
                 headers: { "Content-Type": "application/json" }
             });
             setUserData(res.data);
@@ -31,7 +35,7 @@ export default function SearchUser() {
                     <p>Username: {userData.username}</p>
                     <p>Account Number: {userData.accountNumber}</p>
                     <p>Balance: {userData.balance}</p>
-                    <p>Status: {userData.isActive ? "Active" : "Disabled"}</p>
+                    <p>Status: {userData.active ? "Active" : "Disabled"}</p>
                 </div>
             )}
         </div>

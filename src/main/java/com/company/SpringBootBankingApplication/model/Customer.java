@@ -2,37 +2,42 @@ package com.company.SpringBootBankingApplication.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "customers")
 public class Customer {
-
     @Id
     @Column(name = "account_number", length = 50)
+    @NotBlank(message = "Account number cannot be blank")
     private String accountNumber;
 
     @Column(name = "first_name", nullable = false)
+    @NotBlank(message = "First name cannot be blank")
     private String firstName;
 
     @Column(name = "last_name", nullable = false)
+    @NotBlank(message = "Last name cannot be blank")
     private String lastName;
 
-    @Column(name="username" ,nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     @JsonProperty("username")
+    @NotBlank(message = "Username cannot be blank")
     private String userName;
 
-    @Column(nullable = true)
-    private String password; // NOTE: store hashed in production!
+    @Column(name = "password", nullable = false)
+    @NotBlank(message = "Password cannot be blank")
+    private String password;
 
-    @Column(nullable = false)
+    @Column(name = "balance")
+    @Min(value = 0, message = "Balance cannot be negative")
     private double balance;
 
-    @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    @Column(name="is_active")
+    private boolean isActive ;
 
-    @Column(nullable = false)
+    @Column(name="role", nullable=false)
     private String role;
-    public Customer() {}
 
     public Customer(String accountNumber, String firstName, String lastName, String username, String password, double balance, String role) {
         this.accountNumber = accountNumber;
@@ -45,7 +50,8 @@ public class Customer {
         this.role = role;
     }
 
-    // Getters and setters (generated)
+    public Customer() {}
+
     public String getAccountNumber() { return accountNumber; }
     public void setAccountNumber(String accountNumber) { this.accountNumber = accountNumber; }
 

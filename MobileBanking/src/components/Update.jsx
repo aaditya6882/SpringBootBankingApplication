@@ -7,10 +7,13 @@ export default function UpdateAccount() {
     const [lastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-
+    const admin = JSON.parse(localStorage.getItem("user"));
+    const adminUsername = admin?.username;
+    const adminPassword = admin?.password;
     const fetchAccount = async () => {
         try {
             const res = await axios.get(`http://localhost:8080/api/customers/${accountNumber}/search`, {
+                auth: { username: adminUsername, password: adminPassword },
                 headers: { "Content-Type": "application/json" }
             });
             setFirstName(res.data.firstName || "");
@@ -24,11 +27,13 @@ export default function UpdateAccount() {
     const handleUpdate = async () => {
         try {
             await axios.put(`http://localhost:8080/api/customers/${accountNumber}`, {
+                accountNumber,
                 firstName,
                 lastName,
                 username,
                 password
             }, {
+                auth: { username: adminUsername, password: adminPassword },
                 headers: { "Content-Type": "application/json" }
             });
             alert("Account updated successfully!");

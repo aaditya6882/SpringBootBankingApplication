@@ -3,10 +3,14 @@ import axios from "axios";
 
 export function EnableDisableAccount() {
     const [accountNumber, setAccountNumber] = useState("");
+    const admin = JSON.parse(localStorage.getItem("user"));
+    const adminUsername = admin?.username;
+    const adminPassword = admin?.password;
 
     const handleDisable = async () => {
         try {
             await axios.put(`http://localhost:8080/api/customers/${accountNumber}/disable`, {}, {
+                auth: { username: adminUsername, password: adminPassword },
                 headers: { "Content-Type": "application/json" }
             });
             alert("Account disabled successfully");
@@ -18,6 +22,7 @@ export function EnableDisableAccount() {
     const handleEnable = async () => {
         try {
             await axios.put(`http://localhost:8080/api/customers/${accountNumber}/enable`, {}, {
+                auth: { username: adminUsername, password: adminPassword },
                 headers: { "Content-Type": "application/json" }
             });
             alert("Account enabled successfully");

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { GoogleLogin } from "@react-oauth/google";
+import {GoogleLogin, googleLogout} from "@react-oauth/google";
 
 export default function Login() {
     const [username, setUsername] = useState("");
@@ -14,7 +14,8 @@ export default function Login() {
                 username,
                 password
             });
-            localStorage.setItem("user", JSON.stringify(res.data));
+            localStorage.setItem("user", JSON.stringify({ ...res.data, password }));
+
             if (res.data.role === "ADMIN") navigate("/admin");
             else navigate("/user");
         } catch (err) {
@@ -22,10 +23,23 @@ export default function Login() {
         }
     };
 
-    // const handleGoogleLogin = (credentialResponse) => {
-    //     // Mock: After Google login, navigate to user page
-    //     navigate("/user");
-    // };
+    const handleGoogleLogin = async (credentialResponse) => {
+        try {
+            const token = credentialResponse.credential;
+            const res = await axios.get(
+                "http://localhost:8080/api/customers/oauth2/success",
+                {
+                    params: { token },
+                    withCredentials: true
+                }
+            );
+            localStorage.setItem("user", JSON.stringify(res.data));
+            navigate("/user");
+        } catch (err) {
+            alert(err.response?.data || "Google login failed. Make sure your account is registered.");
+            googleLogout();
+        }
+    };
 
     return (
         <div style={{ padding: "50px" }}>
@@ -43,10 +57,10 @@ export default function Login() {
             /><br/>
             <button onClick={handleLogin}>Login</button>
             <hr/>
-            {/*<GoogleLogin*/}
-            {/*    onSuccess={handleGoogleLogin}*/}
-            {/*    onError={() => alert("Google login failed")}*/}
-            {/*/>*/}
+            <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={() => alert("Google login failed")}
+            />
         </div>
     );
 }

@@ -1,13 +1,14 @@
-import {useEffect, useState} from "react";
+import {use, useEffect, useState} from "react";
 import axios from "axios";
 export function Balance() {
     const [balance, setBalance] = useState(0);
     const user = JSON.parse(localStorage.getItem("user"));
     const username = user?.username;
+    const password=user.password;
     console.log("Username from localStorage:", username);
     const fetchBalance = async () => {
         try {
-            const res = await axios.get(`http://localhost:8080/api/customers/${username}/balance`);
+            const res = await axios.get(`http://localhost:8080/api/customers/${username}/balance`, { auth: { username, password } });
             setBalance(res.data);
         } catch (err) {
             console.log(err);
