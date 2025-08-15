@@ -1,7 +1,6 @@
-package com.company.SpringBootBankingApplication.Service;
-import com.company.SpringBootBankingApplication.model.Customer;
-import com.company.SpringBootBankingApplication.repository.CustomerRepository;
-import com.company.SpringBootBankingApplication.security.SecurityConfig;
+package com.company.springbootbankingapplication.service;
+import com.company.springbootbankingapplication.model.Customer;
+import com.company.springbootbankingapplication.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

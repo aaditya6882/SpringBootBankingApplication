@@ -1,4 +1,4 @@
-package com.company.SpringBootBankingApplication.model;
+package com.company.springbootbankingapplication.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;

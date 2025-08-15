@@ -1,4 +1,4 @@
-package com.company.SpringBootBankingApplication;
+package com.company.springbootbankingapplication;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

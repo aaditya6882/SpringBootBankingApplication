@@ -1,7 +1,7 @@
-package com.company.SpringBootBankingApplication.controller;
+package com.company.springbootbankingapplication.controller;
 
-import com.company.SpringBootBankingApplication.Service.TransactionService;
-import com.company.SpringBootBankingApplication.model.Transaction;
+import com.company.springbootbankingapplication.service.TransactionService;
+import com.company.springbootbankingapplication.model.Transaction;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

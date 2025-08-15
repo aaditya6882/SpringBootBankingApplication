@@ -1,9 +1,9 @@
 
-package com.company.SpringBootBankingApplication.controller;
+package com.company.springbootbankingapplication.controller;
 
-import com.company.SpringBootBankingApplication.Service.CustomerService;
-import com.company.SpringBootBankingApplication.model.Customer;
-import com.company.SpringBootBankingApplication.model.LoginRequest;
+import com.company.springbootbankingapplication.service.CustomerService;
+import com.company.springbootbankingapplication.model.Customer;
+import com.company.springbootbankingapplication.model.LoginRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

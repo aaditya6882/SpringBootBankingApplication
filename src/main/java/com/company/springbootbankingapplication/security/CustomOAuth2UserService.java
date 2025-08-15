@@ -1,7 +1,7 @@
-package com.company.SpringBootBankingApplication.security;
+package com.company.springbootbankingapplication.security;
 
-import com.company.SpringBootBankingApplication.model.Customer;
-import com.company.SpringBootBankingApplication.Service.CustomerService;
+import com.company.springbootbankingapplication.model.Customer;
+import com.company.springbootbankingapplication.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

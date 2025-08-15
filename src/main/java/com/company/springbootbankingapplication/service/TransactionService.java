@@ -1,9 +1,9 @@
-package com.company.SpringBootBankingApplication.Service;
+package com.company.springbootbankingapplication.service;
 
-import com.company.SpringBootBankingApplication.model.Customer;
-import com.company.SpringBootBankingApplication.model.Transaction;
-import com.company.SpringBootBankingApplication.repository.CustomerRepository;
-import com.company.SpringBootBankingApplication.repository.TransactionRepository;
+import com.company.springbootbankingapplication.model.Customer;
+import com.company.springbootbankingapplication.model.Transaction;
+import com.company.springbootbankingapplication.repository.CustomerRepository;
+import com.company.springbootbankingapplication.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;

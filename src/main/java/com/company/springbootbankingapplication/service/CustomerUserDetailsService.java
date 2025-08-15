@@ -1,6 +1,6 @@
-package com.company.SpringBootBankingApplication.Service;
-import com.company.SpringBootBankingApplication.model.Customer;
-import com.company.SpringBootBankingApplication.repository.CustomerRepository;
+package com.company.springbootbankingapplication.service;
+import com.company.springbootbankingapplication.model.Customer;
+import com.company.springbootbankingapplication.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;

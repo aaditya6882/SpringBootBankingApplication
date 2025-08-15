@@ -1,4 +1,4 @@
-package com.company.SpringBootBankingApplication.model;
+package com.company.springbootbankingapplication.model;
 import jakarta.persistence.*;
 
 import java.time.Instant;
