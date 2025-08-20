@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/customers/createAccount").hasRole("ADMIN")
                         .requestMatchers("/api/customers/login").permitAll()
                         .requestMatchers("/api/customers/*/balance", "/api/transactions/history")
