@@ -23,22 +23,9 @@ export default function Login() {
         }
     };
 
-    const handleGoogleLogin = async (credentialResponse) => {
-        try {
-            const token = credentialResponse.credential;
-            const res = await axios.get(
-                "http://localhost:8080/api/customers/oauth2/success",
-                {
-                    params: { token },
-                    withCredentials: true
-                }
-            );
-            localStorage.setItem("user", JSON.stringify(res.data));
-            navigate("/user");
-        } catch (err) {
-            alert(err.response?.data || "Google login failed. Make sure your account is registered.");
-            googleLogout();
-        }
+    const handleGoogleLogin = async () => {
+        window.location.href = "http://localhost:8080/oauth2/authorization/google";
+
     };
 
     return (

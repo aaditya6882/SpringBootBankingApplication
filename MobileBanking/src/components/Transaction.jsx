@@ -12,6 +12,7 @@ export function Transaction() {
         try {
             const res = await axios.get("http://localhost:8080/api/transactions/history",
                 {
+                    withCredentials: true,
                     auth: { username: userName, password },
                     params: { userName, accNum }
             });

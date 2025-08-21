@@ -93,19 +93,9 @@ public class CustomerController {
     }
     @GetMapping("/oauth2/success")
     public ResponseEntity<?> oauth2Success(@AuthenticationPrincipal OAuth2User oAuth2User) {
-        if (oAuth2User == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OAuth2User is null");
-
         String email = oAuth2User.getAttribute("email");
-        System.out.println("OAuth2 Email: " + email);
+        Customer customer = customerService.findByUsername(email).get();
 
-        Optional<Customer> customerOpt = customerService.findByUsername(email);
-        System.out.println("Customer found: " + customerOpt.isPresent());
-
-        if (customerOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not registered");
-        }
-
-        Customer customer = customerOpt.get();
         Map<String, Object> res = new HashMap<>();
         res.put("username", customer.getUsername());
         res.put("role", customer.getRole());

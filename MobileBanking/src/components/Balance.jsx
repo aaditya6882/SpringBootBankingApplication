@@ -8,7 +8,7 @@ export function Balance() {
     console.log("Username from localStorage:", username);
     const fetchBalance = async () => {
         try {
-            const res = await axios.get(`http://localhost:8080/api/customers/${username}/balance`, { auth: { username, password } });
+            const res = await axios.get(`http://localhost:8080/api/customers/${username}/balance`, {withCredentials: true, auth: { username, password } });
             setBalance(res.data);
         } catch (err) {
             console.log(err);

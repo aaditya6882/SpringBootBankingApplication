@@ -27,7 +27,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                                .requestMatchers(
+                                        "/",
+                                        "/oauth2/**",
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/api/customers/oauth2/success"
+                                ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/customers/createAccount").hasRole("ADMIN")
                         .requestMatchers("/api/customers/login").permitAll()
                         .requestMatchers("/api/customers/*/balance", "/api/transactions/history")
@@ -40,7 +46,8 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
-                        .defaultSuccessUrl("/api/customers/oauth2/success", true) // redirect after login
+                        .defaultSuccessUrl("http://localhost:5173/oauth2/redirect", true)
+
                 )
                 .httpBasic(Customizer.withDefaults());
 
